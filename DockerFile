@@ -12,5 +12,7 @@ COPY . .
 #RUN go build -o main .
 #合并多个命令，以减少镜像层数
 RUN go mod download && go build -o runner .
+RUN pwd
+RUN ls -l
 # 运行应用
 CMD ["./runner"]
