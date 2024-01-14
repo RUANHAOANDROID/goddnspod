@@ -1,18 +1,13 @@
 # 使用官方的 golang 镜像作为基础镜像
 FROM golang:1.20-alpine
-# 设置工作目录
-WORKDIR /goddnspod
-# 将当前目录的所有内容复制到工作目录
-COPY . .
-#
-## 使用 go mod 下载依赖
-#RUN go mod download
-#
-## 编译 Go 应用
-#RUN go build -o main .
-#合并多个命令，以减少镜像层数
-RUN go mod download && go build -o runner .
-RUN pwd
+WORKDIR /app
 RUN ls -l
-# 运行应用
+COPY . .
+RUN go mod download
+# Build
+#RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+RUN CGO_ENABLED=0 GOOS=linux go build -o runner .
+# Run
 CMD ["./runner"]
+# --network bridge
+# -v /mnt/disk1/appdata/goddnspod/:/
