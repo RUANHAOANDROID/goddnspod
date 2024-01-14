@@ -1,0 +1,14 @@
+app:
+  version: 1.0
+  debug: true
+  timer: 1 #间隔时间 分钟
+dnsPod:
+  userAgent: Hao88 DDNS/0.1Alpha(52927295@qq.com) #按照dnspod要求的格式
+  tokenId: 468352 #tokenID
+  loginToken: ccaf314e8449e222197e8434c6fa7044 #token
+  format: json  #格式 ，目前仅支持JSON
+  lang: cn  # cn ,en
+  errorOnEmpty: yes #没有数据时是否返回错误，默认为yes，建议用no
+  userId:   #用户的ID，仅代理接口需要，用户接口不需要提交此参数。
+  domain: hao88.cloud #域名
+  subDomain: open #子域名
