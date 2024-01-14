@@ -1,18 +1,31 @@
-# 使用官方的 golang 镜像作为基础镜像
+# 第一阶段：使用 golang 镜像作为基础镜像进行编译
 FROM golang:1.20-alpine AS builder
-MAINTAINER hao88
-LABEL version="1.0"
-LABEL description="dnspod ddns go"
-LABEL maintainer="hao88.cloud 52927295@qq.com"
+
+# 设置工作目录
 WORKDIR /app
-RUN ls -l
-COPY . .
+
+# 将当前目录的 go.mod 和 go.sum 复制到工作目录
+COPY go.mod .
+COPY go.sum .
+
+# 下载依赖
 RUN go mod download
-# Build
-#RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o runner .
-RUN find . -type f ! -name 'runner' ! -name 'config.yml' -delete
-# Run
+
+# 将其他源代码文件复制到工作目录
+COPY . .
+
+# 编译 Go 应用，使用静态链接
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o runner
+
+# 第二阶段：使用轻量级的 alpine 镜像作为基础镜像
+FROM alpine:latest as runner
+
+# 设置工作目录
+WORKDIR /app
+
+# 从第一阶段复制编译好的二进制文件到当前阶段
+COPY --from=builder /app/runner .
+COPY --from=builder /app/config.yml .
+
+# 运行应用
 CMD ["./runner"]
-# --network bridge
-# -v /mnt/disk1/appdata/goddnspod/:/

@@ -19,8 +19,6 @@ type Config struct {
 		TokenId    string `json:"login_token" yaml:"tokenid"`
 		LoginToken string `json:"login_token" yaml:"logintoken"`
 		Format     string `json:"format"yaml:"format"`
-		Lang       string `json:"lang"yaml:"lang"`
-		UserId     string `json:"user_id"yaml:"userid"`
 		Domain     string `json:"domain"yaml:"domain"`
 		SubDomain  string `json:"sub_domain"yaml:"subdomain"`
 	}
