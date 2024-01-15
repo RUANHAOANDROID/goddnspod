@@ -9,7 +9,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"time"
 )
 
 const dnsPodUrl = "https://dnsapi.cn"
@@ -33,8 +32,8 @@ func addHeaders(header *http.Header) {
 	header.Set("User-Agent", conf.UserAgent)
 }
 func InfoVersion() {
-	params := crtBaseParams().Encode()
-	req, err := http.NewRequest("POST", dnsPodUrl+infoVersion, bytes.NewBuffer([]byte(params)))
+	params := crtBaseParams()
+	req, err := creatRequest(infoVersion, params)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -69,16 +68,22 @@ func RecordList() {
 	jsonData := string(body)
 	var data map[string]interface{}
 	if err := json.Unmarshal([]byte(jsonData), &data); err != nil {
-		fmt.Println(jsonData)
 		fmt.Println("JSON 解析失败:", err)
 		return
 	}
+	status, ok := data["status"].(map[string]interface{})
+	if !ok {
+		fmt.Println("status解析错误")
+		return
+	}
+	fmt.Println(status["message"].(string), status["created_at"].(string))
 	// 获取 records 数组
 	records, ok := data["records"].([]interface{})
 	if !ok {
 		fmt.Println("找不到 records 数组")
 		return
 	}
+
 	// 遍历 records 数组，获取每个记录的 name 字段的值
 	for _, record := range records {
 		recordMap, ok := record.(map[string]interface{})
@@ -98,12 +103,19 @@ func RecordList() {
 				fmt.Println("not find value")
 				break
 			}
+			updateOn, ok := recordMap["updated_on"].(string)
+			if !ok {
+				fmt.Println("not find value")
+				break
+			}
+			fmt.Println("最后更新时间:", updateOn)
 			currPIP, err := pkg.PublicIP()
 			if err != nil {
 				fmt.Println(err)
 				break
 			}
-			fmt.Println("Remote IP:", value, "Current IP:", currPIP, "time:", time.Now().Local().Format("2006-01-02 15:04:05"))
+			fmt.Println("DNSPodIP:", value, "当前IP:", currPIP)
+
 			if value != currPIP {
 				recordId := recordMap["id"].(string)
 				recordType := recordMap["type"].(string)
