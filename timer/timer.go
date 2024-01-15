@@ -9,10 +9,10 @@ import (
 func Start(conf *config.Config) {
 	dnspod.SetUp(conf)
 	dnspod.RecordList()
-	timer := time.NewTimer(5 * time.Minute)
+	timer := time.NewTimer(conf.Timer)
 	defer timer.Stop()
 	for {
-		timer.Reset(5 * time.Minute) // 这里复用了 timer
+		timer.Reset(conf.Timer) // 这里复用了 timer
 		select {
 		case <-timer.C:
 			dnspod.RecordList()

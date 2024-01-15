@@ -23,13 +23,13 @@ func SetUp(config *config.Config) {
 }
 func crtBaseParams() url.Values {
 	params := url.Values{}
-	params.Set("login_token", conf.DnsPod.TokenId+","+conf.DnsPod.LoginToken) //必须
-	params.Set("format", conf.DnsPod.Format)                                  //json
+	params.Set("login_token", conf.TokenId+","+conf.LoginToken) //必须
+	params.Set("format", conf.Format)                           //json
 	return params
 }
 func addHeaders(header *http.Header) {
 	header.Set("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-	header.Set("User-Agent", conf.DnsPod.UserAgent)
+	header.Set("User-Agent", conf.UserAgent)
 }
 func InfoVersion() {
 	params := crtBaseParams().Encode()
@@ -44,8 +44,11 @@ func InfoVersion() {
 	fmt.Println(string(body))
 }
 func RecordList() {
+	if conf.LoginToken == "" || conf.TokenId == "" {
+		panic("tokenId或loginToken未填写!")
+	}
 	params := crtBaseParams()
-	params.Set("domain", conf.DnsPod.Domain)
+	params.Set("domain", conf.Domain)
 	req, err := creatRequest(recordList, params)
 	if err != nil {
 		fmt.Println(err)
@@ -60,6 +63,7 @@ func RecordList() {
 	jsonData := string(body)
 	var data map[string]interface{}
 	if err := json.Unmarshal([]byte(jsonData), &data); err != nil {
+		fmt.Println(jsonData)
 		fmt.Println("JSON 解析失败:", err)
 		return
 	}
@@ -82,7 +86,7 @@ func RecordList() {
 			fmt.Println("找不到 name 字段")
 			continue
 		}
-		if name == conf.DnsPod.SubDomain {
+		if name == conf.SubDomain {
 			value, ok := recordMap["value"].(string)
 			if !ok {
 				fmt.Println("not find value")
@@ -108,11 +112,11 @@ func RecordModify(publicIp string, recordId string, recordType string, mx string
 	params := crtBaseParams()
 	params.Set("record_id", recordId) //记录ID。
 	params.Set("record_line", "默认")
-	params.Set("domain", conf.DnsPod.Domain)        //域名
-	params.Set("sub_domain", conf.DnsPod.SubDomain) //子域名
-	params.Set("value", publicIp)                   //ipv4 or v6
-	params.Set("record_type", "A")                  //ipv4 or v6
-	params.Set("mx", mx)                            //ipv4 or v6
+	params.Set("domain", conf.Domain)        //域名
+	params.Set("sub_domain", conf.SubDomain) //子域名
+	params.Set("value", publicIp)            //ipv4 or v6
+	params.Set("record_type", "A")           //ipv4 or v6
+	params.Set("mx", mx)                     //ipv4 or v6
 	req, err := creatRequest(recordModify, params)
 	if err != nil {
 		fmt.Println("Create request error:", err)

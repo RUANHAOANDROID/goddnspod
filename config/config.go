@@ -5,23 +5,18 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"gopkg.in/yaml.v3"
+	"time"
 )
 
 // Config 系统整体配置--
 type Config struct {
-	App struct {
-		Version string `yaml:"version"`
-		Debug   bool   `yaml:"debug"`
-		Timer   int64  `yaml:"timer"`
-	}
-	DnsPod struct {
-		UserAgent  string `json:"user_agent" yaml:"useragent"`
-		TokenId    string `json:"login_token" yaml:"tokenid"`
-		LoginToken string `json:"login_token" yaml:"logintoken"`
-		Format     string `json:"format"yaml:"format"`
-		Domain     string `json:"domain"yaml:"domain"`
-		SubDomain  string `json:"sub_domain"yaml:"subdomain"`
-	}
+	UserAgent  string        `json:"user_agent" yaml:"userAgent"`
+	TokenId    string        `json:"login_token" yaml:"tokenId"`
+	LoginToken string        `json:"login_token" yaml:"loginToken"`
+	Format     string        `json:"format"yaml:"format"`
+	Domain     string        `json:"domain"yaml:"domain"`
+	SubDomain  string        `json:"sub_domain"yaml:"subDomain"`
+	Timer      time.Duration `yaml:"timer"`
 }
 
 var path string
@@ -42,6 +37,17 @@ func Load(path string) (*Config, error) {
 	}
 
 	return c, nil
+}
+func CreateEmpty() *Config {
+	return &Config{
+		UserAgent:  "Hao88 DDNS/1.0Alpha(52927295@qq.com) ",
+		TokenId:    "",
+		LoginToken: "",
+		Format:     "json",
+		Domain:     "youdomain.com",
+		SubDomain:  "sub.youdomain.com",
+		Timer:      5 * time.Minute,
+	}
 }
 func (c *Config) Save() {
 	// 将结构体转换为字节数组

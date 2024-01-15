@@ -7,10 +7,12 @@ import (
 )
 
 func main() {
+	fmt.Println("<(￣︶￣)↗[GO!]...")
 	conf, err := config.Load("config.yml")
 	if err != nil {
-		panic("Not find config.yml")
+		config.CreateEmpty().Save()
+		panic("请完善配置config.yml")
 	}
-	fmt.Println(conf)
+	fmt.Println("Timer interval", conf.Timer)
 	timer.Start(conf)
 }
