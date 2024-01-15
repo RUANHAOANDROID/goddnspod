@@ -47,11 +47,16 @@ func RecordList() {
 	if conf.LoginToken == "" || conf.TokenId == "" {
 		panic("tokenId或loginToken未填写!")
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("发生错误", r)
+		}
+	}()
 	params := crtBaseParams()
 	params.Set("domain", conf.Domain)
 	req, err := creatRequest(recordList, params)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error:", err)
 	}
 	addHeaders(&req.Header)
 	resp, err := http.DefaultClient.Do(req)
@@ -115,8 +120,8 @@ func RecordModify(publicIp string, recordId string, recordType string, mx string
 	params.Set("domain", conf.Domain)        //域名
 	params.Set("sub_domain", conf.SubDomain) //子域名
 	params.Set("value", publicIp)            //ipv4 or v6
-	params.Set("record_type", "A")           //ipv4 or v6
-	params.Set("mx", mx)                     //ipv4 or v6
+	params.Set("record_type", recordType)    //A
+	params.Set("mx", mx)                     //0
 	req, err := creatRequest(recordModify, params)
 	if err != nil {
 		fmt.Println("Create request error:", err)
