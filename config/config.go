@@ -43,7 +43,6 @@ func CreateEmpty() *Config {
 		UserAgent:  "Hao88 DDNS/1.0Alpha(52927295@qq.com) ",
 		TokenId:    "",
 		LoginToken: "",
-		Format:     "json",
 		Domain:     "youdomain.com",
 		SubDomain:  "sub.youdomain.com",
 		Timer:      5 * time.Minute,

@@ -76,7 +76,7 @@ func RecordList() {
 		fmt.Println("status解析错误")
 		return
 	}
-	fmt.Println(status["message"].(string), status["created_at"].(string))
+
 	// 获取 records 数组
 	records, ok := data["records"].([]interface{})
 	if !ok {
@@ -108,14 +108,12 @@ func RecordList() {
 				fmt.Println("not find value")
 				break
 			}
-			fmt.Println("最后更新时间:", updateOn)
 			currPIP, err := pkg.PublicIP()
 			if err != nil {
 				fmt.Println(err)
 				break
 			}
-			fmt.Println("DNSPodIP:", value, "当前IP:", currPIP)
-
+			fmt.Printf("%s\tremote=%s\tcueenet=%s\tlast update=%s", status["created_at"], value, currPIP, updateOn)
 			if value != currPIP {
 				recordId := recordMap["id"].(string)
 				recordType := recordMap["type"].(string)
