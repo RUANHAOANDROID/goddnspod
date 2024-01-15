@@ -103,7 +103,7 @@ func RecordList() {
 				fmt.Println(err)
 				break
 			}
-			fmt.Println(time.Now().Local().Format("2006-01-02 15:04:05"), "Remote IP:", value, "Current IP:", currPIP)
+			fmt.Println("Remote IP:", value, "Current IP:", currPIP, "time:", time.Now().Local().Format("2006-01-02 15:04:05"))
 			if value != currPIP {
 				recordId := recordMap["id"].(string)
 				recordType := recordMap["type"].(string)
