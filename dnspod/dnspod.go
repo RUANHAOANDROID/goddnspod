@@ -24,7 +24,7 @@ func SetUp(config *config.Config) {
 func crtBaseParams() url.Values {
 	params := url.Values{}
 	params.Set("login_token", conf.TokenId+","+conf.LoginToken) //必须
-	params.Set("format", conf.Format)                           //json
+	params.Set("format", "json")                                //json
 	return params
 }
 func addHeaders(header *http.Header) {
@@ -113,7 +113,7 @@ func RecordList() {
 				fmt.Println(err)
 				break
 			}
-			fmt.Printf("%s\tremote=%s\tcueenet=%s\tlast update=%s", status["created_at"], value, currPIP, updateOn)
+			fmt.Printf("%s\tremote:%s\tcueenet:%s\t最后更改时间:%s\n", status["created_at"], value, currPIP, updateOn)
 			if value != currPIP {
 				recordId := recordMap["id"].(string)
 				recordType := recordMap["type"].(string)

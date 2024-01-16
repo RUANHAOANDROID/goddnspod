@@ -13,7 +13,6 @@ type Config struct {
 	UserAgent  string        `json:"user_agent" yaml:"userAgent"`
 	TokenId    string        `json:"login_token" yaml:"tokenId"`
 	LoginToken string        `json:"login_token" yaml:"loginToken"`
-	Format     string        `json:"format"yaml:"format"`
 	Domain     string        `json:"domain"yaml:"domain"`
 	SubDomain  string        `json:"sub_domain"yaml:"subDomain"`
 	Timer      time.Duration `yaml:"timer"`
