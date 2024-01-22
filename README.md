@@ -1,14 +1,15 @@
+dnspod ddns go
 
-清理未使用的镜像
+添加 config.yml文件到根目录 根据自己的环节填写  
 
-docker image prune
+格式如下
+``` yaml
 
-清理未正确挂载的卷
+userAgent: Hao88 DDNS/0.1Alpha(52927295@qq.com) #按照dnspod要求的格式
+tokenId: xxxxxxxx #tokenID
+loginToken: xxxxxxxxxxxxxxxxxxxxx #token
+domain: xxx.cloud #域名
+subDomain: xxx #子域名
+timer: 5m0s #间隔时间 分钟
 
-docker volume prune
-
-Run options
-
-暴漏配置并修改     
---network bridge 桥接网路   
--v /mnt/disk1/appdata/config.yml:/goddnspod/config.yml
+```
