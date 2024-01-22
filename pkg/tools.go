@@ -21,6 +21,10 @@ func PublicIP() (string, error) {
 	resp, err := http.Get(url)
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("反差IP发生错误:", err)
+		return "", err
+	}
 	ip, err := ExtractIP(string(body))
 	if err != nil {
 		fmt.Println("extract ip address error:", err)
