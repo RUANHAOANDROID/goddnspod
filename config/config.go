@@ -16,6 +16,7 @@ type Config struct {
 	Domain     string        `json:"domain"yaml:"domain"`
 	SubDomain  string        `json:"sub_domain"yaml:"subDomain"`
 	Timer      time.Duration `yaml:"timer"`
+	Support    string        `yaml:"Support"`
 }
 
 var path string

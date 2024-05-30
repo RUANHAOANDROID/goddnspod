@@ -3,8 +3,10 @@ package pkg
 import (
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 func ExtractIP(input string) (string, error) {
@@ -31,4 +33,32 @@ func PublicIP() (string, error) {
 		return "", err
 	}
 	return ip, nil
+}
+func PublicIPV6() (string, error) {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+	var ipv6 string
+	for _, addr := range addrs {
+		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() && ipNet.IP.To4() == nil {
+			v6 := ipNet.IP.String()
+			if isPublicIPv6(v6) {
+				ipv6 = v6
+			}
+		}
+	}
+
+	return ipv6, nil
+}
+
+// isPublicIPv6 判断一个IPv6地址是否是公网地址
+func isPublicIPv6(ipv6 string) bool {
+	if strings.HasPrefix(ipv6, "fe80") || // Link-local addresses
+		strings.HasPrefix(ipv6, "fc00") || // Unique local addresses
+		strings.HasPrefix(ipv6, "fd00") { // Unique local addresses
+		return false
+	}
+	return true
 }

@@ -108,17 +108,27 @@ func RecordList() {
 				fmt.Println("not find value")
 				break
 			}
-			currPIP, err := pkg.PublicIP()
-			if err != nil {
-				fmt.Println(err)
-				break
+			var publicIp string
+			if conf.Support == "v6" {
+				publicIp, err = pkg.PublicIPV6()
+				if err != nil {
+					fmt.Println(err)
+					break
+				}
+			} else {
+				publicIp, err = pkg.PublicIP()
+				if err != nil {
+					fmt.Println(err)
+					break
+				}
 			}
-			fmt.Printf("%s\tremote:%s\tcueenet:%s\t最后更改时间:%s\n", status["created_at"], value, currPIP, updateOn)
-			if value != currPIP {
+
+			fmt.Printf("%s\tremote:%s\tcurrent:%s\t最后更改时间:%s\n", status["created_at"], value, publicIp, updateOn)
+			if value != publicIp {
 				recordId := recordMap["id"].(string)
 				recordType := recordMap["type"].(string)
 				recordMx := recordMap["mx"].(string)
-				RecordModify(currPIP, recordId, recordType, recordMx)
+				RecordModify(publicIp, recordId, recordType, recordMx)
 			}
 		}
 	}
