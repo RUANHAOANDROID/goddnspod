@@ -164,7 +164,8 @@ func RecordModify(publicIp string, recordId string, recordType string, mx string
 	}
 
 	// 打印响应内容
-	fmt.Println("response body:", string(body))
+	str := fmt.Sprintf("%s", body)
+	fmt.Println("response body:", str)
 }
 
 func creatRequest(path string, params url.Values) (*http.Request, error) {

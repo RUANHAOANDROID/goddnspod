@@ -1,6 +1,8 @@
+
 # 第一阶段：使用 golang 镜像作为基础镜像进行编译
 FROM golang:1.20-alpine AS builder
-
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
 # 设置工作目录
 WORKDIR /app
 

@@ -43,9 +43,20 @@ func PublicIPV6() (string, error) {
 	var ipv6 string
 	for _, addr := range addrs {
 		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() && ipNet.IP.To4() == nil {
-			v6 := ipNet.IP.String()
-			if isPublicIPv6(v6) {
-				ipv6 = v6
+			v6 := ipNet.IP
+			if v6.IsLoopback() || v6.IsLinkLocalUnicast() || v6.IsLinkLocalMulticast() || v6.IsMulticast() || v6.IsUnspecified() {
+				continue
+			}
+			// 检查是否是唯一本地地址 (Unique local addresses)
+			if strings.HasPrefix(v6.String(), "fc") || strings.HasPrefix(v6.String(), "fd") {
+				continue
+			}
+			if strings.HasPrefix(v6.String(), "2001:") {
+				continue
+			}
+			if strings.HasPrefix(v6.String(), "2409:") {
+				ipv6 = v6.String()
+				break
 			}
 		}
 	}
@@ -55,9 +66,7 @@ func PublicIPV6() (string, error) {
 
 // isPublicIPv6 判断一个IPv6地址是否是公网地址
 func isPublicIPv6(ipv6 string) bool {
-	if strings.HasPrefix(ipv6, "fe80") || // Link-local addresses
-		strings.HasPrefix(ipv6, "fc00") || // Unique local addresses
-		strings.HasPrefix(ipv6, "fd00") { // Unique local addresses
+	if strings.HasPrefix(ipv6, "f") {
 		return false
 	}
 	return true
