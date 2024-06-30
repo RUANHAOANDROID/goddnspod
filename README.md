@@ -11,5 +11,5 @@ loginToken: xxxxxxxxxxxxxxxxxxxxx #token
 domain: xxx.cloud #域名
 subDomain: xxx #子域名
 timer: 5m0s #间隔时间 分钟
-
+support: v6 #支持的IP版本，v4或v6
 ```
