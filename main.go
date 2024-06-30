@@ -13,7 +13,7 @@ func main() {
 		config.CreateEmpty().Save()
 		panic("请完善配置config.yml")
 	}
-	fmt.Println("-Config INFO")
+	fmt.Println("----Config info")
 	fmt.Printf("--UserAgent:%s\n", conf.UserAgent)
 	fmt.Printf("--TokenId:%s\n", conf.TokenId)
 	fmt.Printf("--LoginToken:%s\n", conf.LoginToken)
@@ -21,6 +21,6 @@ func main() {
 	fmt.Printf("--SubDomain:%s\n", conf.SubDomain)
 	fmt.Printf("--Timer:%s\n", conf.Timer)
 	fmt.Printf("--Support:%s\n", conf.Support)
-	fmt.Println("-Start Success")
+	fmt.Println("----Setup success")
 	timer.Start(conf)
 }
