@@ -1,5 +1,6 @@
 ##### dnspod ddns
-![1727886290213](https://github.com/user-attachments/assets/28c7bd7e-908a-4bc9-9638-73d026edf791)
+![1727886356626](https://github.com/user-attachments/assets/91d86861-7c69-4543-b4d2-51f48f2efdee)
+
 
 - 通过反查公网IPV4, 实时绑定到dnspod
 - 支持IPV6公网，可配置的
