@@ -5,7 +5,8 @@
 
 
 - 通过反查公网IPV4, 实时绑定到dnspod
-- 支持IPV6公网，可配置的
+- 支持IPV6公网
+- 更新频率可配置的
 
 添加config.yml文件
 ``` yaml
