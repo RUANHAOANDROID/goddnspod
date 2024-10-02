@@ -1,5 +1,6 @@
 ##### dnspod ddns
-![1727886414210](https://github.com/user-attachments/assets/7c7639bd-e36f-4dc3-a7ca-7caeaa92954b)
+![1727886447464](https://github.com/user-attachments/assets/8b77d040-8d10-42af-b066-9a31e0caa098)
+
 
 
 
