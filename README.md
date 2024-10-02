@@ -1,5 +1,6 @@
 ##### dnspod ddns
-![1727886356626](https://github.com/user-attachments/assets/91d86861-7c69-4543-b4d2-51f48f2efdee)
+![1727886414210](https://github.com/user-attachments/assets/7c7639bd-e36f-4dc3-a7ca-7caeaa92954b)
+
 
 
 - 通过反查公网IPV4, 实时绑定到dnspod
