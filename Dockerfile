@@ -1,16 +1,23 @@
+# 编译 web
+FROM node:18 as frontend-build
 
-# 第一阶段：使用 golang 镜像作为基础镜像进行编译
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./frontend
+
+RUN npm install
+
+COPY frontend/ ./frontend
+
+RUN npm run build
+
+# 编译go
 FROM golang:1.20-alpine AS builder
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
-# 设置工作目录
 WORKDIR /app
-
-# 将当前目录的 go.mod 和 go.sum 复制到工作目录
 COPY go.mod .
 COPY go.sum .
-
-# 下载依赖
 RUN go mod download
 
 # 将其他源代码文件复制到工作目录
@@ -20,7 +27,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o runner
 
 # 第二阶段：使用轻量级的 alpine 镜像作为基础镜像
-FROM alpine:3.19.0 as runner
+FROM alpine:3.20.3 as runner
 
 # 设置工作目录
 WORKDIR /app
@@ -28,6 +35,10 @@ WORKDIR /app
 # 从第一阶段复制编译好的二进制文件到当前阶段
 COPY --from=builder /app/runner .
 COPY --from=builder /app/config.yml .
+COPY --from=builder /app/frontend/build/client ./frontend/build/client
+
+# 暴露端口 6565
+EXPOSE 6565
 
 # 运行应用
 CMD ["./runner"]

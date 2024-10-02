@@ -1,21 +1,41 @@
 package timer
 
 import (
+	"context"
 	"dnspod_ddns_go/config"
 	"dnspod_ddns_go/dnspod"
 	"time"
 )
 
-func Start(conf *config.Config) {
-	dnspod.SetUp(conf)
+type Timer struct {
+	conf   *config.Config
+	ctx    context.Context
+	cancel context.CancelFunc
+}
+
+func NewTimer(conf *config.Config) *Timer {
+	ctx, cancel := context.WithCancel(context.Background())
+	return &Timer{conf: conf, ctx: ctx, cancel: cancel}
+}
+
+func (t *Timer) Start() {
+	dnspod.SetUp(t.conf)
 	dnspod.RecordList()
-	timer := time.NewTimer(conf.Timer)
-	defer timer.Stop()
+	timer, err := time.ParseDuration(t.conf.Timer)
+	if err != nil {
+		panic(err)
+	}
+	ticker := time.NewTicker(timer)
+	defer ticker.Stop()
 	for {
-		timer.Reset(conf.Timer) // 这里复用了 timer
 		select {
-		case <-timer.C:
+		case <-ticker.C:
 			dnspod.RecordList()
+		case <-t.ctx.Done():
+			return
 		}
 	}
+}
+func (t *Timer) Stop() {
+	t.cancel()
 }
