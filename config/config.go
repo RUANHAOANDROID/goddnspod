@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"gopkg.in/yaml.v3"
+	"sync"
 )
 
 // Config 系统整体配置--
@@ -19,9 +20,12 @@ type Config struct {
 }
 
 var path string
+var configMux sync.RWMutex // 用于确保并发读写安全
 
 // Load 加载配置
 func Load(path string) (*Config, error) {
+	configMux.RLock() // 读锁
+	defer configMux.RUnlock()
 	// 使用 viper 读取配置文件
 	viper.SetConfigFile(path)
 	err := viper.ReadInConfig()
@@ -48,6 +52,8 @@ func CreateEmpty() *Config {
 	}
 }
 func (c *Config) Save() {
+	configMux.Lock() // 写锁
+	defer configMux.Unlock()
 	// 将结构体转换为字节数组
 	yamlBytes, err := yaml.Marshal(c)
 	if err != nil {
