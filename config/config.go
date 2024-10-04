@@ -44,11 +44,12 @@ func Load(path string) (*Config, error) {
 func CreateEmpty() *Config {
 	return &Config{
 		UserAgent:  "Hao88 DDNS/1.0Alpha(52927295@qq.com) ",
-		TokenId:    "",
-		LoginToken: "",
+		TokenId:    "6688",
+		LoginToken: "xxx",
 		Domain:     "youdomain.com",
-		SubDomain:  "sub.youdomain.com",
+		SubDomain:  "sub",
 		Timer:      "5m30s",
+		Support:    "v4",
 	}
 }
 func (c *Config) Save() {
