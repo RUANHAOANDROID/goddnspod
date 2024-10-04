@@ -19,13 +19,14 @@ WORKDIR /app
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-
+# 安装UPX
+RUN apk add --no-cache upx
 # 将其他源代码文件复制到工作目录
 COPY . .
-
 # 编译 Go 应用，使用静态链接
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o runner
-
+# 使用UPX进行压缩
+RUN upx --best --lzma runner
 # 第二阶段：使用轻量级的 alpine 镜像作为基础镜像
 FROM alpine:3.20.3 as runner
 
