@@ -1,13 +1,9 @@
 ##### dnspod ddns
 ![1727886447464](https://github.com/user-attachments/assets/8b77d040-8d10-42af-b066-9a31e0caa098)
 
-
-
-
 - 通过反查公网IPV4, 实时绑定到dnspod
 - 支持IPV6公网
 - 更新频率可配置的
-
 添加config.yml文件
 ``` yaml
 # 配置文件
@@ -24,12 +20,9 @@ support: v6 #支持的IP版本，v4或v6
 volumes:
    - /mnt/disk1/appdata/ddnspodgo:/app/config.yml
 ```
-
 docker compose
-
 ``` yaml
 version: "3"
-
 services:
   ddnspod-go:
     image: hao88/ddnspodgo
