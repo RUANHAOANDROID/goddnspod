@@ -64,8 +64,9 @@ func Register(dnsTimer *timer.Timer) {
 		}
 	}))
 	// 启动服务器
-	fmt.Println("DDNSPod server on :6565")
-	err = http.ListenAndServe(":6565", handler)
+	port := ":5173"
+	fmt.Println("DDNSPod server on " + port)
+	err = http.ListenAndServe(port, handler)
 	if err != nil {
 		log.Fatal(err)
 	}
